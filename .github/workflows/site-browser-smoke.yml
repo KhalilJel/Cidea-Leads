@@ -1,9 +1,6 @@
 name: Website browser smoke test
 
 on:
-  push:
-    branches:
-      - design/market-inspired-refresh
   pull_request:
     branches:
       - main
