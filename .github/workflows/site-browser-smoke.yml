@@ -88,5 +88,11 @@ jobs:
           const norwegianHeading = await page.locator('main h1').first().textContent();
           if (!norwegianHeading?.includes('B2B leads som passer bedriften din')) throw new Error('Norwegian service page translation is missing: ' + norwegianHeading);
           console.log('PASS service page switches between Norwegian and English');
+
+          await page.goto(baseUrl + '/', { waitUntil: 'networkidle' });
+          await page.locator('header .headRight button').click();
+          const homepageHeading = await page.locator('main h2').first().textContent();
+          if (!homepageHeading?.includes('A long list is not a sales strategy.')) throw new Error('Homepage English translation is missing: ' + homepageHeading);
+          console.log('PASS homepage key message switches to English');
           await browser.close();
           EOF
