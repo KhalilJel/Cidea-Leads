@@ -40,6 +40,15 @@ jobs:
           const errors = [];
           page.on('pageerror', error => errors.push(error.message));
 
+          const sitemapResponse = await page.request.get(baseUrl + '/sitemap.xml');
+          if (!sitemapResponse.ok()) throw new Error('sitemap.xml is not accessible');
+          const sitemapText = await sitemapResponse.text();
+          const sitemapPaths = [...sitemapText.matchAll(/<loc>https:\/\/cidealeads\\.com([^<]*)<\/loc>/g)].map(match => match[1] || '/');
+          const expectedSitemapPaths = new Set(["/","/b2b-leads","/lead-generation","/qualified-leads","/custom-lead-generation","/how-it-works","/blog","/blog/hva-er-leadgenerering","/blog/hva-er-en-kvalifisert-lead","/blog/b2b-leadgenerering"]);
+          for (const path of expectedSitemapPaths) if (!sitemapPaths.includes(path)) throw new Error('Missing sitemap URL: ' + path);
+          for (const path of sitemapPaths) if (!expectedSitemapPaths.has(path)) throw new Error('Unexpected or stale sitemap URL: ' + path);
+          console.log('PASS sitemap contains exactly the published page routes');
+
           for (const route of routes) {
             errors.length = 0;
             const response = await page.goto(baseUrl + route, { waitUntil: 'networkidle' });
