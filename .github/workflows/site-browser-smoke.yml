@@ -1,0 +1,83 @@
+name: Website browser smoke test
+
+on:
+  push:
+    branches:
+      - design/market-inspired-refresh
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  browser-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npm install --no-save playwright
+      - run: npx playwright install --with-deps chromium
+      - name: Start Vite
+        run: |
+          npm run dev -- --host 127.0.0.1 > /tmp/vite.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:5173/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/vite.log
+          exit 1
+      - name: Verify routes, responsive layout and mobile navigation
+        run: |
+          node --input-type=module <<'EOF'
+          import { chromium } from 'playwright';
+
+          const baseUrl = 'http://127.0.0.1:5173';
+          const routes = ['/', '/b2b-leads', '/how-it-works', '/blog', '/blog/hva-er-leadgenerering'];
+          const browser = await chromium.launch({ headless: true });
+          const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+          const errors = [];
+          page.on('pageerror', error => errors.push(error.message));
+
+          for (const route of routes) {
+            errors.length = 0;
+            const response = await page.goto(baseUrl + route, { waitUntil: 'networkidle' });
+            if (!response || !response.ok()) throw new Error(`${route}: HTTP ${response?.status()}`);
+            const heading = await page.locator('main h1').first().textContent().catch(() => '');
+            if (!heading?.trim()) throw new Error(`${route}: missing main H1`);
+            if (errors.length) throw new Error(`${route}: browser errors: ${errors.join('; ')}`);
+            console.log(`PASS route ${route}: ${heading.trim()}`);
+          }
+
+          for (const width of [320, 390, 768, 1440]) {
+            await page.setViewportSize({ width, height: 900 });
+            for (const route of routes) {
+              await page.goto(baseUrl + route, { waitUntil: 'networkidle' });
+              const dimensions = await page.evaluate(() => ({ viewport: document.documentElement.clientWidth, content: document.documentElement.scrollWidth }));
+              if (dimensions.content > dimensions.viewport + 1) throw new Error(`Horizontal overflow at ${width}px on ${route}: ${dimensions.content}px > ${dimensions.viewport}px`);
+            }
+            console.log(`PASS responsive width ${width}px`);
+          }
+
+          await page.setViewportSize({ width: 1440, height: 900 });
+          await page.goto(baseUrl + '/', { waitUntil: 'networkidle' });
+          if (!await page.getByRole('navigation').isVisible()) throw new Error('Desktop navigation is hidden');
+          await page.setViewportSize({ width: 390, height: 844 });
+          await page.goto(baseUrl + '/', { waitUntil: 'networkidle' });
+          await page.getByRole('button', { name: 'Åpne meny' }).click();
+          if (!await page.getByRole('navigation').getByRole('link', { name: 'B2B leads' }).isVisible()) throw new Error('Mobile menu did not open');
+          await page.getByRole('navigation').getByRole('link', { name: 'B2B leads' }).click();
+          if (await page.getByRole('navigation').isVisible()) throw new Error('Mobile menu did not close after navigation');
+          console.log('PASS desktop and mobile navigation');
+
+          await page.goto(baseUrl + '/', { waitUntil: 'networkidle' });
+          await page.keyboard.press('Tab');
+          const focus = await page.evaluate(() => { const s = getComputedStyle(document.activeElement); return { style: s.outlineStyle, width: parseFloat(s.outlineWidth) }; });
+          if (focus.style === 'none' || focus.width < 2) throw new Error('Visible keyboard focus indicator missing');
+          await page.emulateMedia({ reducedMotion: 'reduce' });
+          const duration = await page.locator('.solid').first().evaluate(el => getComputedStyle(el).transitionDuration.split(',')[0].trim());
+          if (parseFloat(duration) > 0.001) throw new Error(`Reduced motion not respected: ${duration}`);
+          console.log('PASS focus visibility and reduced motion');
+          await browser.close();
+          EOF
