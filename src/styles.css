@@ -4,3 +4,11 @@
 .heroText>small,.final small{color:#aab5ad}
 .problemRows p,.machine p,.oppMain p,.measure p,.articleGrid p,.articleList p,.serviceBoard p,.serviceNote p{font-size:14px}
 nav a,.headRight button,footer a{min-height:44px;display:inline-flex;align-items:center}
+
+
+/* Responsive navigation and accessible interaction states */
+.menuToggle{display:none;border:1px solid var(--line);border-radius:999px;background:transparent;padding:10px 12px;font:500 10px 'DM Mono';letter-spacing:.6px;color:var(--white);cursor:pointer}
+:where(a,button,[role="button"],input,textarea,select):focus-visible{outline:2px solid var(--lime);outline-offset:4px}
+@media(max-width:700px){header{gap:10px}.menuToggle{display:inline-flex;align-items:center;justify-content:center;min-height:44px;order:3}.headRight{margin-left:auto;gap:8px}.site header nav{display:none}.site header nav.navOpen{display:flex;position:absolute;top:67px;left:0;right:0;margin:0;padding:16px 6vw 24px;background:var(--bg);border-bottom:1px solid var(--line);flex-direction:column;align-items:stretch;gap:0;z-index:30}.site header nav.navOpen a{display:flex;align-items:center;min-height:48px;border-bottom:1px solid var(--line);font-size:12px}.site header nav.navOpen a:last-child{border-bottom:0}}
+@media(max-width:420px){header{gap:8px}.logo{font-size:17px;white-space:nowrap}.headRight{gap:4px}.headRight button{min-width:34px;min-height:44px}.pill{display:none}.menuToggle{padding:9px 10px;white-space:nowrap}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
