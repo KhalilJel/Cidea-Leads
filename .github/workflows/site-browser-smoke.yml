@@ -34,7 +34,7 @@ jobs:
           import { chromium } from 'playwright';
 
           const baseUrl = 'http://127.0.0.1:5173';
-          const routes = ['/', '/b2b-leads', '/how-it-works', '/blog', '/blog/hva-er-leadgenerering'];
+          const routes = ['/', '/b2b-leads', '/how-it-works', '/qualified-leads', '/lead-generation', '/custom-lead-generation', '/blog', '/blog/hva-er-leadgenerering', '/blog/hva-er-en-kvalifisert-lead', '/blog/b2b-leadgenerering'];
           const browser = await chromium.launch({ headless: true });
           const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
           const errors = [];
