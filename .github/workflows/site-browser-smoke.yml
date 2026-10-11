@@ -98,5 +98,12 @@ jobs:
           const homepageHeading = await page.locator('main h2').first().textContent();
           if (!homepageHeading?.includes('A long list is not a sales strategy.')) throw new Error('Homepage English translation is missing: ' + homepageHeading);
           console.log('PASS homepage key message switches to English');
+
+          await page.goto(baseUrl + '/blog/hva-er-leadgenerering', { waitUntil: 'networkidle' });
+          await page.locator('header .headRight button').click();
+          const articleHeading = await page.locator('main h1').first().textContent();
+          if (!articleHeading?.includes('What is lead generation?')) throw new Error('English article translation is missing: ' + articleHeading);
+          await page.waitForFunction(() => document.title.includes('What is lead generation?'));
+          console.log('PASS article content and SEO title switch to English');
           await browser.close();
           EOF
