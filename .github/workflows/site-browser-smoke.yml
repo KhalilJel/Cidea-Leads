@@ -79,5 +79,14 @@ jobs:
           const duration = await page.locator('.solid').first().evaluate(el => getComputedStyle(el).transitionDuration.split(',')[0].trim());
           if (parseFloat(duration) > 0.001) throw new Error(`Reduced motion not respected: ${duration}`);
           console.log('PASS focus visibility and reduced motion');
+
+          await page.goto(baseUrl + '/b2b-leads', { waitUntil: 'networkidle' });
+          await page.locator('header .headRight button').click();
+          const englishHeading = await page.locator('main h1').first().textContent();
+          if (!englishHeading?.includes('B2B leads built around your target market')) throw new Error('English service page translation is missing: ' + englishHeading);
+          await page.locator('header .headRight button').click();
+          const norwegianHeading = await page.locator('main h1').first().textContent();
+          if (!norwegianHeading?.includes('B2B leads som passer bedriften din')) throw new Error('Norwegian service page translation is missing: ' + norwegianHeading);
+          console.log('PASS service page switches between Norwegian and English');
           await browser.close();
           EOF
