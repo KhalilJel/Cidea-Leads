@@ -90,15 +90,14 @@ jobs:
           await page.locator('header .headRight button').click();
           const englishHeading = await page.locator('main h1').first().textContent();
           if (!englishHeading?.includes('B2B leads built around your target market')) throw new Error('English service page translation is missing: ' + englishHeading);
+          await page.waitForFunction(() => document.title.includes('B2B leads for your target market'));
+          const serviceDescription = await page.locator('meta[name="description"]').getAttribute('content');
+          if (!serviceDescription?.includes('A researched shortlist of companies')) throw new Error('English service metadata is missing: ' + serviceDescription);
+          console.log('PASS English service page and SEO metadata');
           await page.locator('header .headRight button').click();
           const norwegianHeading = await page.locator('main h1').first().textContent();
           if (!norwegianHeading?.includes('B2B leads som passer bedriften din')) throw new Error('Norwegian service page translation is missing: ' + norwegianHeading);
           console.log('PASS service page switches between Norwegian and English');
-          await page.locator('header .headRight button').click();
-          await page.waitForFunction(() => document.title.includes('B2B leads for your target market'));
-          const serviceDescription = await page.locator('meta[name="description"]').getAttribute('content');
-          if (!serviceDescription?.includes('A researched shortlist of companies')) throw new Error('English service metadata is missing: ' + serviceDescription);
-          console.log('PASS service-specific English SEO metadata');
 
           await page.goto(baseUrl + '/', { waitUntil: 'networkidle' });
           await page.locator('header .headRight button').click();
