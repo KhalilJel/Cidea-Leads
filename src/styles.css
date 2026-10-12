@@ -4,3 +4,24 @@
 .heroText>small,.final small{color:#aab5ad}
 .problemRows p,.machine p,.oppMain p,.measure p,.articleGrid p,.articleList p,.serviceBoard p,.serviceNote p{font-size:14px}
 nav a,.headRight button,footer a{min-height:44px;display:inline-flex;align-items:center}
+
+
+/* Responsive navigation and accessible interaction states */
+.menuToggle{display:none;border:1px solid var(--line);border-radius:999px;background:transparent;padding:10px 12px;font:500 10px 'DM Mono';letter-spacing:.6px;color:var(--white);cursor:pointer}
+:where(a,button,[role="button"],input,textarea,select):focus-visible{outline:2px solid var(--lime);outline-offset:4px}
+@media(max-width:700px){header{gap:10px}.menuToggle{display:inline-flex;align-items:center;justify-content:center;min-height:44px;order:3}.headRight{margin-left:auto;gap:8px}.site header nav{display:none}.site header nav.navOpen{display:flex;position:absolute;top:67px;left:0;right:0;margin:0;padding:16px 6vw 24px;background:var(--bg);border-bottom:1px solid var(--line);flex-direction:column;align-items:stretch;gap:0;z-index:30}.site header nav.navOpen a{display:flex;align-items:center;min-height:48px;border-bottom:1px solid var(--line);font-size:12px}.site header nav.navOpen a:last-child{border-bottom:0}}
+@media(max-width:420px){header{gap:8px}.logo{font-size:17px;white-space:nowrap}.headRight{gap:4px}.headRight button{min-width:34px;min-height:44px}.pill{display:none}.menuToggle{padding:9px 10px;white-space:nowrap}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+
+/* Service-page question hierarchy */
+.leadServiceQuestion{padding:65px 0 75px;border-top:1px solid #cfd7cc;border-bottom:1px solid #cfd7cc;margin:0 0 70px}
+.leadServiceQuestion h2{max-width:1000px;font-size:clamp(42px,5.6vw,76px);line-height:.95;letter-spacing:-4px;margin:18px 0 0}
+@media(max-width:700px){.leadServiceQuestion{padding:45px 0;margin-bottom:55px}.leadServiceQuestion h2{font-size:42px;letter-spacing:-2.5px}}
+
+/* Article cards: titles should start immediately, without empty label space. */
+.articleGrid a,.articleList a{gap:8px}.articleGrid h3,.articleList h2{margin-top:0}.articleGrid b,.articleList b{margin-top:auto}
+
+
+/* Visual lead pipeline: a compact diagram that explains the deliverable at a glance. */
+.leadPipeline{padding:68px 7vw;background:#101711;color:#f3f7ee;border-top:1px solid #29362a;border-bottom:1px solid #29362a}.pipelineHeading{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:28px}.pipelineHeading>p{font:10px 'DM Mono';letter-spacing:1.5px;color:#b6e56c}.pipelineHeading h3{max-width:620px;font-size:clamp(28px,4.2vw,50px);line-height:1;letter-spacing:-2px;margin:0}.pipelineSteps{display:grid;grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr) 24px minmax(0,1fr) 24px minmax(0,1fr);align-items:center;gap:10px}.pipelineSteps article{display:flex;align-items:center;gap:14px;min-height:110px;border:1px solid #354531;background:#172319;padding:18px}.pipelineDot{display:grid;place-items:center;flex:0 0 34px;height:34px;border:1px solid #b6e56c;border-radius:50%;color:#b6e56c;font:11px 'DM Mono'}.pipelineSteps article div{display:flex;flex-direction:column;gap:7px}.pipelineSteps strong{font-size:16px}.pipelineSteps small{font-size:11px;line-height:1.4;color:#bac7b6}.pipelineSteps>i{text-align:center;font-style:normal;color:#b6e56c;font-size:20px}@media(max-width:760px){.pipelineHeading{display:block}.pipelineHeading h2{margin-top:12px}.pipelineSteps{grid-template-columns:1fr;gap:8px}.pipelineSteps>i{transform:rotate(90deg);height:18px}.pipelineSteps article{min-height:82px}}
