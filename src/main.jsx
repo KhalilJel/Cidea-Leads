@@ -2,7 +2,7 @@ import React,{useEffect,useState}from"react";
 import{createRoot}from"react-dom/client";
 import"./styles.css";
 
-const mail="mailto:hello@cidealeads.com";
+const mail="mailto:hello@cidealeads.com?subject=Uforpliktende%20vurdering%20Cidea%20Leads";
 const articles=[
 {slug:"hva-er-leadgenerering",title:"Hva er leadgenerering?",text:"Leadgenerering handler om å finne potensielle kunder som faktisk passer virksomheten.",body:"God leadgenerering handler ikke om størst mulig kontaktliste. Det handler om målgruppe, relevans, kvalifisering og et tydelig neste steg.",titleEn:"What is lead generation?",textEn:"Lead generation is about finding potential customers who genuinely fit your business.",bodyEn:"Good lead generation is not about the biggest possible contact list. It is about target fit, relevance, qualification and a clear next step."},
 {slug:"hva-er-en-kvalifisert-lead",title:"Hva er en kvalifisert lead?",text:"Hva som gjør et B2B prospekt relevant nok til at salg bør prioritere det.",body:"En kvalifisert lead bør vurderes mot kriterier som bransje, størrelse, geografi, rolle, behov og relevante signaler.",titleEn:"What is a qualified lead?",textEn:"What makes a B2B prospect relevant enough for sales to prioritise.",bodyEn:"A qualified lead should be assessed against criteria such as industry, company size, geography, role, need and relevant signals."},
