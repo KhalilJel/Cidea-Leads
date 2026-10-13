@@ -12,19 +12,28 @@ Find → Qualify → Connect → Measure
 
 ## Website
 
-Primary language: Norwegian  
-Secondary language: English
+- Primary language Norwegian at `/`, English at `/en`.
+- Visual direction: Linear-inspired precision instrument. See [docs/redesign-linear.md](docs/redesign-linear.md).
 
-## Initial architecture
+## Development
 
-- Home
-- B2B Leads
-- Lead Generation
-- Qualified Leads
-- Industries
-- How It Works
-- Blog
-- Contact
+```bash
+npm ci
+npm run dev       # local dev server
+npm run build     # client build + SSR build + prerender every route to dist/
+npm test          # checks the prerendered build (run after build)
+npm run preview   # serve dist/ locally
+```
+
+## Structure
+
+- `src/content.js` — all copy in Norwegian and English, services, prices and example data for the product visuals.
+- `src/routes.js` — URL ↔ page mapping and language handling.
+- `src/seo.js` — titles, descriptions, canonical, hreflang, structured data, sitemap.
+- `src/components/Product.jsx` — product-style UI (pipeline, board, record, criteria), always labelled as example data.
+- `src/pages/`, `src/components/` — page templates and shared UI.
+- `blog/*.md`, `blog/en/*.md` — articles.
+- `scripts/prerender.mjs` — writes static HTML per route; `scripts/check-build.mjs` — build checks.
 
 ## Technical direction
 
